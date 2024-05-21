@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑</title>
+    <meta name="renderer" content="webkit">
+    <link rel="icon" href="/static/imgs/favicon.webp" type="image/webp">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+
+    <link rel="stylesheet" th:href="@{/static/css/admin/font.css}">
+    <link rel="stylesheet" th:href="@{/static/css/admin/xadmin.css}">
+    <script th:src="@{/static/layui/layui.js}" charset="utf-8"></script>
+    <script th:src="@{/static/js/xadmin.js}"></script>
+    <script th:src="@{/static/js/jq/jquery-3.4.1.min.js}"></script>
+
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]--></head>
+
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form class="layui-form" id="my-form">
+            <input type="hidden" name="id" th:value="${id}">
+            <div class="layui-form-item">
+                <label for="L_username" class="layui-form-label">用户名</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_username" name='username' required class="layui-input" th:value="${username}"></div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <label for="L_sex" class="layui-form-label">
+                    <span class="x-red">*</span>性别</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_sex" name="sex" autocomplete="off" lay-verify="sex" class="layui-input"></div>
+<!--                <div class="layui-form-mid layui-word-aux">-->
+<!--                    <span class="x-red">*</span>将会成为您唯一的登入名</div>-->
+            </div>
+            <div class="layui-form-item">
+                <label for="L_age" class="layui-form-label">
+                    <span class="x-red">*</span>年龄</label>
+                <div class="layui-input-inline">
+                    <input type="number" id="L_age" name="age" lay-verify="age" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_phone" class="layui-form-label">
+                    <span class="x-red">*</span>电话</label>
+                <div class="layui-input-inline">
+                    <input type="number" id="L_phone" name="phone" lay-verify="phone" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_address" class="layui-form-label">
+                    <span class="x-red">*</span>地址</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_address" name="address" autocomplete="off" class="layui-input"></div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_btn" class="layui-form-label"></label>
+                <button id="L_btn" class="layui-btn" lay-filter="save" lay-submit="">修改</button></div>
+        </form>
+    </div>
+</div>
+<script>layui.use(['form', 'layer'], function() {
+        $ = layui.jquery;
+        let form = layui.form,
+            layer = layui.layer;
+
+    //自定义验证规则
+    form.verify({
+        age: function(value) {
+            if (value.length>2 || value.length<1) {
+                return '年龄不合法';
+            }
+        },
+        phone: [/^1[3-9]\d{9}$/, '电话不合法'],
+        sex: function (value) {
+            if(value.length!=1){
+                return '性别不合法'
+            }
+        }
+    });
+
+        //监听提交
+        form.on('submit(save)', function(data) {
+            // console.log(data);
+            //发请求
+            $.ajax({
+                url: `/user/update`,
+                type: 'POST',
+                data: $('#my-form').serialize(),
+                success: function (data){
+                    if (data === 'yes') {
+                        layer.alert("修改成功", {
+                            icon: 6
+                        }, function() {
+                            //后台删除成功后，前端捉到所有被选中的，发异步进行删除
+                            $(".layui-form-checked").not('.header').parents('tr').remove();
+                            // 获得frame索引
+                            let index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            parent.layer.close(index);
+                        });
+                    }else{
+                        layer.alert('未知的错误，请联系管理员！')
+                    }
+                },
+                error: function (data){
+                    console.log(data)
+                }
+            })
+            return false;
+        });
+
+    });
+</script>
+</body>
+</html>

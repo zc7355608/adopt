@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="/static/imgs/favicon.webp" type="image/webp">
+    <meta charset="UTF-8">
+    <title>宠物详情</title>
+
+    <link rel="stylesheet" th:href="@{/static/bootstrap-old/bootstrap.min.css}">
+    <link th:href="@{/static/css/show/jquery.slideBox.css}" rel="stylesheet" type="text/css"/>
+    <link rel="stylesheet" th:href="@{/static/css/show/show.css}">
+
+    <script th:src="@{/static/js/jq/jquery-2.2.3.min.js}"></script>
+    <script th:src="@{/static/js/bootstrap-old/bootstrap.min.js}"></script>
+    <script th:src="@{/static/js/jquery.slideBox.min.js}"></script>
+    <script th:src="@{/static/js/jquery.comment.js}"></script>
+
+    <style>
+        .myDiv {
+            margin-top: 40px;
+        }
+        .modal {
+            top: 200px;
+        }
+    </style>
+</head>
+<body>
+<div class="myDiv">
+    <div>
+        <h2>待领养的动物</h2>
+        <center>
+            <div id="demo1" class="slideBox">
+                <ul class="items">
+                    <li th:each="pic:${session.pics}">
+                        <a><img class="my-img" th:src="|/static/imgs/animal/${pic}|"></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="name">
+                <img th:src="@{/static/imgs/show/p1.jpg}" height="50px" width="50px">
+                <span th:text="|我叫 ${session.pet.petName}|"></span>
+            </div>
+        </center>
+        <div class="animal">
+            <div class="group">
+                <div class="animalX1">
+                    <img th:src="@{/static/imgs/show/p2.jpg}"><span>编号</span><br>
+                    <p th:text="${session.pet.id}"></p>
+                </div>
+                <div class="animalX2">
+                    <img th:src="@{/static/imgs/show/p3.jpg}"><span>生日</span><br>
+                    <p th:text="${session.pet.birth}"></p>
+                </div>
+            </div>
+            <div class="group">
+                <div class="animalX3">
+                    <img th:src="@{/static/imgs/show/p4.jpg}"><span>品种</span><br>
+                    <p th:text="${session.pet.petType}"></p>
+                </div>
+                <div class="animalX4">
+                    <img th:src="@{/static/imgs/show/p5.jpg}"><span>性别</span><br>
+                    <p th:text="${session.pet.sex}"></p>
+                </div>
+            </div>
+        </div>
+        <div class="animal_me">
+            <div class="animal_me1">
+                <img th:src="@{/static/imgs/show/p6.jpg}">
+                <img th:src="@{/static/imgs/show/p7.jpg}">
+                <img th:src="@{/static/imgs/show/p8.jpg}">
+                <img th:src="@{/static/imgs/show/p9.jpg}">
+                <img th:src="@{/static/imgs/show/p10.jpg}">
+            </div>
+            <div class="animal_me2"><p th:text='|大家好，我是${session.pet.petName}。${session.pet.remark}。你能带我回家吗？|'>你能带我回家吗？</p></div>
+            <div class="animal_me3"><img th:src="@{/static/imgs/show/p11.jpg}"></div>
+        </div>
+        <div class="my_btn">
+            <button class="btn btn-primary btn-lg" id="pet_adopt_modal_btn">想要领养</button>
+            <button class="btn btn-primary btn-lg" id="tianchuan_btn" onclick="location.href='/user/adopt'"
+                    style="float: right;position: relative;left: 150px;bottom: 45px">返回中心
+            </button>
+        </div>
+    </div>
+
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myAdopt" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div style="color:#952f5563;font-size:14px;border:1px solid pink;padding:5px;border-radius:10px;">
+                        <span>领养说明:</span>
+                        <p>·从汪汪喵平台领养宠物不需支付任何费用。</p>
+                        <p>·由于能力有限，我们目前只接受xx地区的领养申请。如果您的居住地不是xx，请咨询您周边的领养机构。</p>
+                        <p>·您所填写的信息我们不会泄露，该信息只用于领养的评估。</p>
+                        <p>·如果您现在仍是一名学生，请和您的父母或监护人就领养事宜进行充分的沟通。在取得他们的同意后，由您的父母或监护人代为填写领养申请表。</p>
+                    </div>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h3 class="modal-title" id="myModalLabel" style="margin-top:10px;">
+                        请确认个人信息
+                    </h3>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" id="new_adopt_form" action="/adopt/apply" method="post">
+                        <input type="hidden" th:value="${session.user.id}" name="userId">
+                        <input type="hidden" th:value="${session.pet.id}" name="petId">
+                        <div class="form-group">
+                            <label for="new_petName" class="col-sm-2 control-label">
+                                宠物名： </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="new_petName" th:value="${session.pet.petName}" readonly>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="new_Name" class="col-sm-2 control-label">
+                                领养人： </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="new_Name"
+                                       placeholder="请输入领养人姓名" name="adopterName" required th:value="${session.user.username}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="new_Sex" class="col-sm-2 control-label">
+                                性别： </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="new_Sex"
+                                       placeholder="请输入领养人性别" name="adopterSex" required pattern="." th:value="${session.user.sex}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="new_tel" class="col-sm-2 control-label">
+                                电话： </label>
+                            <div class="col-sm-10">
+                                <input type="tel" class="form-control" id="new_tel"
+                                       placeholder="请输入领养人电话" name="adopterPhone" required th:value="${session.user.phone}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="new_Email" class="col-sm-2 control-label">
+                                email： </label>
+                            <div class="col-sm-10">
+                                <input type="email" class="form-control" id="new_Email"
+                                       placeholder="请输入领养人邮箱地址" name="adopterEmail" required th:value="${session.user.email}"/>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="new_Adress" class="col-sm-2 control-label">
+                                住址： </label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" id="new_Adress"
+                                       placeholder="请输入领养人住址" name="adopterAddress" required th:value="${session.user.address}"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="adopt_btn">关闭
+                    </button>
+                    <button type="button" class="btn btn-primary" id="submit_btn">提交申请</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal -->
+    </div>
+
+    <div class="container">
+        <!--存放评论的地方-->
+        <div class="comment-list">
+
+        </div>
+
+        <div class="commentbox">
+            <textarea cols="80" rows="50" placeholder="来说几句吧" class="mytextarea" id="content"></textarea>
+            <div class="btn btn-info pull-right" id="comment">评论</div>
+        </div>
+    </div>
+</div>
+<!--主回复-->
+<div class="modal fade" id="saveAnswer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel1">评论</h4>
+            </div>
+            <div class="modal-body">
+                <form id="save_answer_form">
+                    <input type="hidden" name="id" id="edit_id">
+                    <textarea class="form-control" id="edit_content" placeholder="请发表评论！" name="content"></textarea>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="comment_btn">关闭</button>
+                <button type="button" class="btn btn-primary" id="save_answer_btn">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    let user = /*[[${session.user}]]*/{};
+    let pics = /*[[${session.pics}]]*/[];
+
+    jQuery(function ($) {
+        if(pics.length>1) {
+            $('#demo1').slideBox();
+        }
+    });
+//id
+    let pet = /*[[${session.pet}]]*/{};
+    let currentUser = /*[[${session.user}]]*/{};
+
+    $(function () {
+        to_page();
+    });
+
+    function to_page() {
+        $("#content").val("");
+        //session里面的数据
+        $.ajax({
+            url: `/comment/allComments?petId=${pet.id}`,
+            type: "GET",
+            success: function (comments) {
+                submit(comments);
+            },
+            error: function (comments) {
+                alert("评论导出失败");
+            }
+        });
+    }
+
+    //字符串拼接
+    function submit(comments) {
+        //清空数据
+        $(".comment-list").empty();
+        //对结果进行遍历
+        console.log(comments);
+        $.each(comments, function (index, comment) {
+            let headTd = $("<header></header>").append($("<img>").attr("src", "/static/imgs/user/" + (comment.user.pic)));
+            let head = $("<div></div>").addClass("comment-right");
+            let userNameTd = $("<h3></h3>").append(comment.user.username);
+            let bodyTd = $("<div></div>").addClass("comment-content-header");
+            let timeTd = $("<span></span>").append($("<i></i>").addClass("glyphicon glyphicon-time")).append(comment.commentTime);
+            bodyTd.append(timeTd);
+            let commentTd = $("<p></p>").addClass("content").append(comment.content);
+            let answer = $("<div></div>").addClass("comment-content-footer");
+            let answerHead = $("<div></div>").addClass("row");
+            let answerbtn = $("<div></div>").addClass("col-md-2").append($("<span></span>").addClass("reply-btn").append("回复").attr("save-id", comment.id));
+            if(currentUser.id===comment.userId){
+                answerbtn.append($("<a>删除</a>").attr("style","color:#aaa;cursor:pointer;").attr("onclick",`deleteComment(${comment.id})`))
+            }
+            answerHead.append(answerbtn);
+            answer.append(answerHead);
+            let replayListTd = null;
+            if (comment.answers != null) {
+                let answers = comment.answers;
+                replayListTd = $("<div></div>").addClass("reply-list");
+                $.each(answers, function (index, answer) {
+                    //my
+                    let replay = $("<div></div>").append($("<a></a>").append(answer.username)).append("回复：").append($("<a></a>").append(comment.user.username).append("  ")).append($("<span></span>").append(answer.content));
+                    let contentTd = $("<p></p>").append($("<span></span>").append(answer.answerTime));
+                    if(currentUser.id===answer.userId){
+                        contentTd.append($("<a>删除</a>").attr("style","color:#aaa;cursor:pointer;").attr("onclick",`deleteAnswer(${answer.id})`))
+                    }
+                    let replayTd = $("<div></div>").addClass("reply").append(replay).append(contentTd);
+                    replayListTd.append(replayTd);
+                });
+            }
+            head.append(userNameTd).append(bodyTd).append(commentTd).append(answer).append(replayListTd);
+            $("<div></div>").addClass("comment-info")
+                .append(headTd)
+                .append(head)
+                .appendTo(".comment-list")
+        });
+    };
+
+    $("#comment").click(function () {
+        let comment = $("#content").val();
+        if (comment == null) {
+            alert("请填入评论后才能发表")
+        }else{
+            $.ajax({
+                url: "/comment/insert?comment=" + comment,
+                type: "POST",
+                success: function (result) {
+                    if(result==='yes'){
+                        alert("评论插入成功");
+                        to_page();
+                    }else{
+                        alert("评论插入失败")
+                    }
+                },
+                error: function (result) {
+                    console.log(result)
+                }
+            })
+        }
+    });
+
+
+    //清空表单样式及内容
+    function reset_form(ele) {
+        $(ele)[0].reset();
+        //清空表单样式
+        $(ele).find("*").removeClass("has-error has-success");
+        $(ele).find(".help-block").text("");
+    }
+
+    //点击申请按钮弹出模态框。
+    $("#pet_adopt_modal_btn").click(function () {
+        //清除表单数据（表单完整重置（表单的数据，表单的样式））
+        reset_form("#new_adopt_form");
+        //弹出模态框
+        $("#myAdopt").modal({
+            backdrop: "static"
+        });
+    });
+    //点击保存，保存到申请表
+    $("#submit_btn").click(function () {
+        let $ted = $('#new_adopt_form');
+        $ted.submit();
+    });
+
+    $(document).on("click", ".reply-btn", function () {
+        let id = $(this).attr("save-id");
+        //2、弹出模态框
+        $("#saveAnswer").modal({
+            backdrop: "static"
+        });
+        //new-----
+        $("#save_answer_btn").click(function () {
+            let content = $("#edit_content").val()
+            $.ajax({
+                url: `/answer/insert?commentId=${id}&content=${content}`,
+                type: "POST",
+                success: function (result) {
+                    $("#comment_btn").click();
+                    if(result==="yes"){
+                        alert("回复成功！");
+                        to_page();
+                    }else{
+                        alert("回复失败！");
+                    }
+                },
+                error: function (result) {
+                    $("#comment_btn").click();
+                    console.log(result)
+                }
+            })
+        });
+    });
+
+    //删除本人的回复
+    function deleteAnswer(id){
+        $.ajax({
+            url: `/answer/delete/${id}`,
+            method: 'delete',
+            success: result => {
+                if(result==='yes'){
+                    //删除成功，刷新页面
+                    location.reload()
+                }else{
+                    console.log(result)
+                }
+            },
+            error: result => {
+                console.log(result)
+            }
+        })
+    }
+
+    //删除本人的评论
+    function deleteComment(id){
+        $.ajax({
+            url: `/comment/delete/${id}`,
+            method: 'delete',
+            success: result => {
+                if(result==='yes'){
+                    //删除成功，刷新页面
+                    location.reload()
+                }else{
+                    console.log(result)
+                }
+            },
+            error: result => {
+                console.log(result)
+            }
+        })
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>已同意</title>
+    <link rel="icon" href="/static/imgs/favicon.webp" type="image/webp">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+
+    <link rel="stylesheet" th:href="@{/static/css/admin/font.css}">
+    <link rel="stylesheet" th:href="@{/static/css/admin/xadmin.css}">
+    <script th:src="@{/static/layui/layui.js}" charset="utf-8"></script>
+    <script th:src="@{/static/js/xadmin.js}"></script>
+    <script th:src="@{/static/js/jq/jquery-3.4.1.min.js}"></script>
+
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+        #my-nav-bar:hover {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="x-nav">
+          <span class="layui-breadcrumb">
+            <a href="">首页</a>
+            <a href="">演示</a>
+            <a>
+              <cite>导航元素</cite>
+            </a>
+          </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
+        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+</div>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <div class="layui-form layui-col-space5">
+                        <div class="layui-inline layui-show-xs-block">
+                            <input type="text" placeholder="请输入用户名" class="layui-input" id="my-search">
+                        </div>
+                        <div class="layui-inline layui-show-xs-block" onclick="queryUser(document.querySelector('#my-search').value,1)">
+                            <button class="layui-btn" lay-submit="false" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card-body layui-table-body layui-table-main">
+                    <table class="layui-table layui-form">
+                        <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>宠物名</th>
+                            <th>申请人</th>
+                            <th>申请人性别</th>
+                            <th>申请人电话</th>
+                            <th>申请人邮箱</th>
+                            <th>申请人地址</th>
+                            <th>申请时间</th>
+                            <th>领养状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="user_data">
+                        <!--                        动态数据-->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-card-body">
+                    <div class="page">
+                        <div class="page">
+                            <!--                            导航卡片-->
+                            <div id="my-nav-bar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $(()=>{
+        queryUser()
+    })
+    function queryUser(username, pageNum){
+        let urlStr = `/adopt/applys/agree`
+        if(pageNum){
+            urlStr = urlStr +'?pageNum='+ pageNum
+        }else{
+            urlStr = urlStr +'?pageNum='+ 1
+        }
+        if(username){
+            urlStr = urlStr +'&username='+ username
+        }
+        //请求数据
+        $.ajax({
+            url: urlStr,
+            type: "GET",
+            dataType: 'json',
+            success: function (info) {
+                //表格
+                let adppts = info.list
+                const tbodyEle = document.querySelector('#user_data')
+                let table_code = ''
+                for(let i=0; i<info.size; i++){
+                    let adopt = adppts[i]
+                    table_code += `
+                        <tr>
+                            <td>${adopt.id}</td>
+                            <td>${adopt.petName}</td>
+                            <td>${adopt.adopterName}</td>
+                            <td>${adopt.adopterSex}</td>
+                            <td>${adopt.adopterPhone}</td>
+                            <td>${adopt.adopterEmail}</td>
+                            <td>${adopt.adopterAddress}</td>
+                            <td>${adopt.applyTime}</td>
+                            <td>${adopt.state}</td>
+                            <td>已同意</td>
+                        </tr>
+                    `
+                }
+                tbodyEle.innerHTML = table_code
+
+                //导航条
+                const nav = document.querySelector('#my-nav-bar')
+                let nav_code = ''
+                //如果有上一页
+                if(info.hasPreviousPage){
+                    nav_code += `<span class="first" onclick="queryUser(undefined, 1)">首页</span><span onclick='queryUser(undefined, ${info.prePage})' class="prev">&lt;&lt;</span>`
+                }
+                //拼接当前的导航卡片
+                info.navigatepageNums.forEach(function(item, index){
+                    if(info.pageNum===item){
+                        nav_code += `<span class="current" onclick="queryUser(undefined, ${item})">${item}</span>`
+                    }else{
+                        nav_code += `<span onclick="queryUser(undefined, ${item})">${item}</span>`
+                    }
+                })
+                //如果有下一页
+                if(info.hasNextPage){
+                    nav_code += `<span class="next" onclick='queryUser(undefined, ${info.nextPage})'>&gt;&gt;</span><span class="last" onclick="queryUser(undefined, ${info.pages})">尾页</span>`
+                }
+                document.querySelector('#my-nav-bar').innerHTML = nav_code
+                // console.log(info)
+            },
+            error: function (data) {
+                console.log(data)
+            }
+        })
+    }
+</script>
+</html>

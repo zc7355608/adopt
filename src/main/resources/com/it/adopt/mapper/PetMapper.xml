@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.adopt.mapper.PetMapper">
+  <resultMap id="BaseResultMap" type="com.it.adopt.bean.Pet">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="pet_name" jdbcType="VARCHAR" property="petName" />
+    <result column="pet_type" jdbcType="VARCHAR" property="petType" />
+    <result column="sex" jdbcType="CHAR" property="sex" />
+    <result column="birth" jdbcType="CHAR" property="birth" />
+    <result column="pic" jdbcType="VARCHAR" property="pic" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_pet
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.it.adopt.bean.Pet">
+    insert into t_pet (id, pet_name, pet_type, 
+      sex, birth, pic, state, 
+      remark)
+    values (#{id,jdbcType=INTEGER}, #{petName,jdbcType=VARCHAR}, #{petType,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=CHAR}, #{birth,jdbcType=CHAR}, #{pic,jdbcType=VARCHAR}, #{state,jdbcType=TINYINT}, 
+      #{remark,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.it.adopt.bean.Pet">
+    update t_pet
+    set pet_name = #{petName,jdbcType=VARCHAR},
+      pet_type = #{petType,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=CHAR},
+      birth = #{birth,jdbcType=CHAR},
+      pic = #{pic,jdbcType=VARCHAR},
+      state = #{state,jdbcType=TINYINT},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, pet_name, pet_type, sex, birth, pic, state, remark
+    from t_pet
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, pet_name, pet_type, sex, birth, pic, state, remark
+    from t_pet
+  </select>
+  <select id="count" resultType="_int">
+    select count(*) from t_pet
+  </select>
+  <select id="selectByPetType" resultMap="BaseResultMap">
+    select id, pet_name, pet_type, sex, birth, pic, state, remark
+    from t_pet where pet_type=#{type}
+  </select>
+  <select id="selectByState" resultMap="BaseResultMap">
+    select id, pet_name, pet_type, sex, birth, pic, state, remark
+    from t_pet where state=#{state}
+  </select>
+</mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.adopt.mapper.AdminMapper">
+  <resultMap id="BaseResultMap" type="com.it.adopt.bean.Admin">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="admin_name" jdbcType="VARCHAR" property="adminName" />
+    <result column="admin_pwd" jdbcType="VARCHAR" property="adminPwd" />
+    <result column="realname" jdbcType="VARCHAR" property="realname" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="birth" jdbcType="VARCHAR" property="birth" />
+    <result column="sex" jdbcType="CHAR" property="sex" />
+    <result column="pic" jdbcType="VARCHAR" property="pic" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_admin
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.it.adopt.bean.Admin">
+    insert into t_admin (id, admin_name, admin_pwd, 
+      realname, phone, email, 
+      birth, sex, pic, remark
+      )
+    values (#{id,jdbcType=INTEGER}, #{adminName,jdbcType=VARCHAR}, #{adminPwd,jdbcType=VARCHAR}, 
+      #{realname,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{birth,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, #{pic,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.it.adopt.bean.Admin">
+    update t_admin
+    set admin_name = #{adminName,jdbcType=VARCHAR},
+      admin_pwd = #{adminPwd,jdbcType=VARCHAR},
+      realname = #{realname,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      birth = #{birth,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=CHAR},
+      pic = #{pic,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, admin_name, admin_pwd, realname, phone, email, birth, sex, pic, remark
+    from t_admin
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, admin_name, admin_pwd, realname, phone, email, birth, sex, pic, remark
+    from t_admin
+  </select>
+  <select id="selectByNameAndPwd" resultMap="BaseResultMap">
+    select id, admin_name, admin_pwd, realname, phone, email, birth, sex, pic, remark
+    from t_admin where admin_name=#{adminName} and admin_pwd=#{adminPwd}
+  </select>
+  <select id="count" resultType="_int">
+    select count(*) from t_admin;
+  </select>
+  <select id="selectByName" resultMap="BaseResultMap">
+    select id, admin_name, admin_pwd, realname, phone, email, birth, sex, pic, remark
+    from t_admin where admin_name=#{name}
+  </select>
+</mapper>

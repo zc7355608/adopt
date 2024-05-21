@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/imgs/favicon.webp" type="image/webp">
+    <title>操作失败</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9e8e8;
+            padding: 20px;
+        }
+        h1 {
+            color: #cc0000;
+        }
+        p {
+            color: #990000;
+        }
+        a {
+            display: block;
+            margin-top: 20px;
+            color: #cc0000;
+            text-decoration: none;
+        }
+        #countdown {
+            font-size: 2em;
+            color: #cc0000;
+        }
+    </style>
+</head>
+<body>
+<h1>ERROR</h1>
+<p>未知的原因，申请失败，请联系管理员！</p>
+<p>页面将在<span id="countdown">5</span>秒后自动返回，您也可以点击下面的链接手动跳转。</p>
+<a id="homeLink" th:href="@{/user/top}">返回</a>
+
+<script th:inline="javascript">
+    let timeLeft = 5;
+    const countdownElement = document.getElementById('countdown');
+
+    const countdownInterval = setInterval(() => {
+        timeLeft--;
+        countdownElement.textContent = timeLeft;
+        if (timeLeft === 0) {
+            clearInterval(countdownInterval);
+            location.href = /*[[@{/user/top}]]*/'#';
+        }
+    }, 1000);
+</script>
+</body>
+</html>

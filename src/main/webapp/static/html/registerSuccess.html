@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/static/imgs/favicon.webp" type="image/webp">
+    <title>注册成功</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f9f9f9;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+        a {
+            display: block;
+            margin-top: 20px;
+            color: #007bff;
+            text-decoration: none;
+        }
+        #countdown {
+            font-size: 2em;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+<h1>注册成功</h1>
+<p>恭喜您，注册成功！</p>
+<p>页面将在<span id="countdown">5</span>秒后自动返回登录页，您也可以点击下面的链接手动跳转。</p>
+<a id="homeLink" href="/static/html/login.html">去登陆</a>
+
+<script>
+    let timeLeft = 5;
+    const countdownElement = document.getElementById('countdown');
+
+    const countdownInterval = setInterval(() => {
+        timeLeft--;
+        countdownElement.textContent = timeLeft;
+        if (timeLeft === 0) {
+            clearInterval(countdownInterval);
+            window.location.href = '/static/html/login.html';
+        }
+    }, 1000);
+</script>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!doctype html>
+<html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>汪汪喵宠物管理</title>
+    <link rel="icon" href="/static/imgs/favicon.webp" type="image/webp">
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+
+    <link rel="stylesheet" th:href="@{/static/css/admin/font.css}">
+    <link rel="stylesheet" th:href="@{/static/css/admin/xadmin.css}">
+    <!-- <link rel="stylesheet" href="./css/theme5.css"> -->
+    <script th:src="@{/static/layui/layui.js}" charset="utf-8"></script>
+    <script th:src="@{/static/js/xadmin.js}"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script>
+        // 是否开启刷新记忆tab功能
+        // var is_remember = false;
+    </script>
+</head>
+<body class="index">
+<!-- 顶部开始 -->
+<div class="container">
+    <div class="logo">
+        <a href="#">汪汪喵宠物管理 v1.0</a></div>
+    <div class="left_open">
+        <a><i title="展开左侧栏" class="iconfont">&#xe699;</i></a>
+    </div>
+    <ul class="layui-nav right" lay-filter="">
+        <li class="layui-nav-item">
+            <a href='javascript:;'>
+                <img th:src="@{|/static/imgs/admin/${session.admin.pic}|}" class="layui-nav-img"/>
+                <span th:text='${session.admin.adminName}'></span>
+            </a>
+            <dl class="layui-nav-child">
+                <!-- 二级菜单 -->
+                <dd>
+                    <a onclick="xadmin.open('个人信息','/admin/admin-personal')">个人信息</a></dd>
+                <dd>
+                    <a href="/admin/logout">切换帐号</a></dd>
+                <dd>
+                    <a href="/admin/logout">退出</a></dd>
+            </dl>
+        </li>
+    </ul>
+</div>
+<div class="left-nav">
+    <div id="side-nav">
+        <ul id="nav">
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="用户管理">&#xe6b8;</i>
+                    <cite>用户管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('用户列表','/admin/user-list')">
+                            <i class="iconfont">&#xe732;</i>
+                            <cite>用户列表</cite>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="管理员管理">&#xe726;</i>
+                    <cite>管理员管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('管理员列表','/admin/admin-list')">
+                            <i class="iconfont">&#xe6c7;</i>
+                            <cite>管理员列表</cite>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="宠物管理">&#xe6e1;</i>
+                    <cite>宠物管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('宠物列表','/admin/pet-list')">
+                            <i class="iconfont">&#xe6e1;</i>
+                            <cite>宠物列表</cite>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="领养管理">&#xe723;</i>
+                    <cite>领养管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('领养申请','/admin/adopt-apply')">
+                            <i class="iconfont">&#xe69f;</i>
+                            <cite>领养申请</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('已同意','/admin/agree')">
+                            <i class="iconfont">&#xe6b1;</i>
+                            <cite>已同意</cite></a>
+                    </li>
+                    <li>
+                        <a onclick="xadmin.add_tab('已拒绝','/admin/disagree')">
+                            <i class="iconfont">&#xe6b7;</i>
+                            <cite>已拒绝</cite></a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="志愿者管理">&#xe753;</i>
+                    <cite>志愿者管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('志愿者申请','/admin/apply')">
+                            <i class="iconfont">&#xe69b;</i>
+                            <cite>志愿者申请</cite>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="page-content">
+    <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
+        <ul class="layui-tab-title">
+            <li class="home">
+                <i class="layui-icon">&#xe68e;</i>我的主页</li></ul>
+        <div class="layui-unselect layui-form-select layui-form-selected" id="tab_right">
+            <dl>
+                <dd data-type="this">关闭当前</dd>
+                <dd data-type="other">关闭其它</dd>
+                <dd data-type="all">关闭全部</dd></dl>
+        </div>
+        <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <iframe src='/admin/welcome' frameborder="0" scrolling="yes" class="x-iframe"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

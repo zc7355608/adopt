@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.adopt.mapper.ApplyMapper">
+  <resultMap id="BaseResultMap" type="com.it.adopt.bean.Apply">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="age" jdbcType="INTEGER" property="age" />
+    <result column="phone" jdbcType="VARCHAR" property="phone" />
+    <result column="message" jdbcType="VARCHAR" property="message" />
+    <result column="apply_time" jdbcType="TIMESTAMP" property="applyTime" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_apply
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.it.adopt.bean.Apply">
+    insert into t_apply (id, name, email, 
+      age, phone, message, 
+      apply_time, state)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{age,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{message,jdbcType=VARCHAR}, 
+      #{applyTime,jdbcType=TIMESTAMP}, #{state,jdbcType=TINYINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.it.adopt.bean.Apply">
+    update t_apply
+    set name = #{name,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      phone = #{phone,jdbcType=VARCHAR},
+      message = #{message,jdbcType=VARCHAR},
+      apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, name, email, age, phone, message, apply_time, state
+    from t_apply
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, name, email, age, phone, message, apply_time, state
+    from t_apply
+  </select>
+  <select id="selectByState" parameterType="Byte" resultMap="BaseResultMap">
+    select id, name, email, age, phone, message, apply_time, state
+    from t_apply
+    where state = #{state,jdbcType=INTEGER}
+  </select>
+  <select id="selectByNameAndState" parameterType="map" resultMap="BaseResultMap">
+    select id, name, email, age, phone, message, apply_time, state
+    from t_apply
+    where name=#{name} and state=#{state}
+  </select>
+</mapper>

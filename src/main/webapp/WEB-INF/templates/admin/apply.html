@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>志愿者申请</title>
+    <link rel="icon" href="/static/imgs/favicon.webp" type="image/webp">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+
+    <link rel="stylesheet" th:href="@{/static/css/admin/font.css}">
+    <link rel="stylesheet" th:href="@{/static/css/admin/xadmin.css}">
+    <script th:src="@{/static/layui/layui.js}" charset="utf-8"></script>
+    <script th:src="@{/static/js/xadmin.js}"></script>
+    <script th:src="@{/static/js/jq/jquery-3.4.1.min.js}"></script>
+
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <style>
+        #my-nav-bar:hover {
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+<div class="x-nav">
+          <span class="layui-breadcrumb">
+            <a>首页</a>
+            <a>演示</a>
+            <a><cite>导航元素</cite></a>
+          </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" onclick="location.reload()" title="刷新">
+        <i class="layui-icon layui-icon-refresh" style="line-height:30px"></i></a>
+</div>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-body ">
+                    <div class="layui-form layui-col-space5">
+                        <div class="layui-inline layui-show-xs-block">
+                            <input class="layui-input"  autocomplete="off" placeholder="开始日" name="start" id="start">
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <input class="layui-input"  autocomplete="off" placeholder="截止日" name="end" id="end">
+                        </div>
+                        <div class="layui-inline layui-show-xs-block">
+                            <input type="text" placeholder="请输入用户名" class="layui-input" id="my-search">
+                        </div>
+                        <div class="layui-inline layui-show-xs-block" onclick="queryUser(document.querySelector('#my-search').value,1)">
+                            <button class="layui-btn" lay-submit="false" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-card-body layui-table-body layui-table-main">
+                    <table class="layui-table layui-form">
+                        <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>姓名</th>
+                            <th>邮箱</th>
+                            <th>年龄</th>
+                            <th>电话</th>
+                            <th>申请信息</th>
+                            <th>申请时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="user_data">
+                        <!--                        动态数据-->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="layui-card-body">
+                    <div class="page">
+                        <div class="page">
+                            <!--                            导航卡片-->
+                            <div id="my-nav-bar"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $(()=>{
+        queryUser()
+    })
+    function queryUser(username, pageNum){
+        let urlStr = '/apply/applys'
+        if(pageNum){
+            urlStr = urlStr +'?pageNum='+ pageNum
+        }else{
+            urlStr = urlStr +'?pageNum='+ 1
+        }
+        if(username){
+            urlStr = urlStr +'&username='+ username
+        }
+        //请求数据
+        $.ajax({
+            url: urlStr,
+            type: "GET",
+            dataType: 'json',
+            success: function (info) {
+                //表格
+                let applys = info.list
+                const tbodyEle = document.querySelector('#user_data')
+                let table_code = ''
+                for(let i=0; i<info.size; i++){
+                    let apply = applys[i]
+                    table_code += `
+                        <tr>
+                            <td>${i+1}</td>
+                            <td>${apply.name}</td>
+                            <td>${apply.email}</td>
+                            <td>${apply.age}</td>
+                            <td>${apply.phone}</td>
+                            <td>${apply.message}</td>
+                            <td>${apply.applyTime}</td>
+                            <td class="td-manage">
+                                <button class="layui-btn layui-btn layui-btn-xs"  onclick="agree(${apply.id})" >同意</button>
+                                <button class="layui-btn-danger layui-btn layui-btn-xs"  onclick="disagree(${apply.id})" href="javascript:;" >不同意</button>
+                            </td>
+                        </tr>
+                    `
+                }
+                tbodyEle.innerHTML = table_code
+
+                //导航条
+                const nav = document.querySelector('#my-nav-bar')
+                let nav_code = ''
+                //如果有上一页
+                if(info.hasPreviousPage){
+                    nav_code += `<span class="first" onclick="queryUser(undefined, 1)">首页</span><span onclick='queryUser(undefined, ${info.prePage})' class="prev">&lt;&lt;</span>`
+                }
+                //拼接当前的导航卡片
+                info.navigatepageNums.forEach(function(item, index){
+                    if(info.pageNum===item){
+                        nav_code += `<span class="current" onclick="queryUser(undefined, ${item})">${item}</span>`
+                    }else{
+                        nav_code += `<span onclick="queryUser(undefined, ${item})">${item}</span>`
+                    }
+                })
+                //如果有下一页
+                if(info.hasNextPage){
+                    nav_code += `<span class="next" onclick='queryUser(undefined, ${info.nextPage})'>&gt;&gt;</span><span class="last" onclick="queryUser(undefined, ${info.pages})">尾页</span>`
+                }
+                document.querySelector('#my-nav-bar').innerHTML = nav_code
+                // console.log(info)
+            },
+            error: function (data) {
+                console.log(data)
+            }
+        })
+    }
+
+    //同意按钮
+    function agree(id){
+        if(confirm('确定同意申请吗？')){
+            const xhr = new XMLHttpRequest()
+            xhr.open('put', `/apply/agree/${id}`)
+            xhr.addEventListener('loadend', ()=>{
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    layui.use(['form', 'layer'], function() {
+                        let layer = layui.layer
+                        if(xhr.response==='yes'){
+                            layer.alert("邮件发送成功！", {icon: 6})
+                        }else{
+                            layer.alert('邮件发送失败，请联系管理员！')
+                        }
+                    })
+                    queryUser()
+                }else{
+                    console.log(xhr.status, xhr.statusText)
+                }
+            })
+            xhr.send()
+        }
+    }
+    //不同意按钮
+    function disagree(id){
+        if(confirm('确定拒绝申请吗？')){
+            const xhr = new XMLHttpRequest()
+            xhr.open('put', `/apply/disagree/${id}`)
+            xhr.addEventListener('loadend', ()=>{
+                if (xhr.status >= 200 && xhr.status < 300) {
+                    layui.use(['form', 'layer'], function() {
+                        let layer = layui.layer;
+
+                        if(xhr.response==='yes'){
+                            layer.alert("邮件发送成功！", {icon: 6})
+                        }else{
+                            layer.alert('邮件发送失败，请联系管理员！')
+                        }
+                    })
+                    queryUser()
+                }else{
+                    console.log(xhr.status, xhr.statusText)
+                }
+            })
+            xhr.send()
+        }
+    }
+
+    //日期框
+    layui.use(['laydate','form'], function(){
+        let laydate = layui.laydate;
+        let form = layui.form;
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+    });
+</script>
+</html>

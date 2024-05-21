@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html class="x-admin-sm" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>添加</title>
+    <link rel="icon" href="/static/imgs/favicon.webp" type="image/webp">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+
+    <link rel="stylesheet" th:href="@{/static/css/admin/font.css}">
+    <link rel="stylesheet" th:href="@{/static/css/admin/xadmin.css}">
+    <script th:src="@{/static/layui/layui.js}" charset="utf-8"></script>
+    <script th:src="@{/static/js/xadmin.js}"></script>
+    <script th:src="@{/static/js/jq/jquery-3.4.1.min.js}"></script>
+
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="layui-fluid">
+    <div class="layui-row">
+        <form class="layui-form" id="my-form">
+            <div class="layui-form-item">
+                <label for="L_petName" class="layui-form-label">宠物名</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_petName" name='petName' class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_petType" class="layui-form-label">宠物类型</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_petType" required name='petType' class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_sex" class="layui-form-label">性别</label>
+                <div class="layui-input-inline">
+                    <input type="text" id="L_sex" lay-verify="sex" class="layui-input" placeholder="雌/雄">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_birth" class="layui-form-label">生日</label>
+                <div class="layui-input-inline">
+                    <input type="date" id="L_birth" name='birth' class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_img" class="layui-form-label">上传照片</label>
+                <div class="layui-input-inline">
+                    <input type="file" id="L_img" name="img" multiple="multiple">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label for="L_remark" class="layui-form-label">备注信息</label>
+                <div class="layui-input-inline">
+                    <textarea id="L_remark" name="remark" rows="5" cols="33"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label"></label>
+                <button type="submit" class="layui-btn">增加</button>
+            </div>
+        </form>
+    </div>
+</div>
+<script>
+    document.querySelector('#my-form').addEventListener('submit', (e)=>{
+        e.preventDefault()
+
+        const xhr = new XMLHttpRequest()
+        xhr.open('POST', '/pet/addPet')
+        const fd = new FormData()
+        let files = document.querySelector('#L_img').files
+        if(files.length>0){
+            for(let i=0; i<files.length; i++){
+                fd.append('imgs', files[i])
+            }
+        }
+        // console.dir( document.querySelector('#L_img').files[0] )
+        // console.dir( document.querySelector('#L_img').files )
+        fd.append('petType', document.querySelector('#L_petType').value)
+        fd.append('petName', document.querySelector('#L_petName').value)
+        fd.append('sex', document.querySelector('#L_sex').value)
+        fd.append('birth', document.querySelector('#L_birth').value)
+        fd.append('remark', document.querySelector('#L_remark').value)
+        xhr.send(fd)
+        xhr.addEventListener('loadend', ()=>{
+            if(xhr.status >= 200 || xhr.status < 300){
+                layui.use(['form', 'layer'], function() {
+                    let layer = layui.layer;
+
+                    if(xhr.response==='yes'){
+                        layer.alert("增加成功", {
+                                icon: 6
+                            },
+                            function() {
+                                // 获得frame索引
+                                let index = parent.layer.getFrameIndex(window.name);
+                                //关闭当前frame
+                                parent.layer.close(index);
+                            });
+                    }else{
+                        layer.alert('新增失败，请联系管理员！')
+                    }
+                })
+            }else{
+                console.log(xhr.response)
+            }
+        })
+    })
+</script>
+</body>
+</html>

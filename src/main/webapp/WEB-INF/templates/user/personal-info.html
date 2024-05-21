@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta content="multipart/form-data;charset=utf-8"/>
+    <title>个人信息修改</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" href="/static/imgs/favicon.webp" type="image/webp">
+
+    <!-- bootstrap -->
+    <link th:href="@{/static/css/personalInfo/bootstrap/bootstrap.css}" rel="stylesheet"/>
+    <link th:href="@{/static/css/personalInfo/bootstrap/bootstrap-responsive.css}" rel="stylesheet"/>
+    <link th:href="@{/static/css/personalInfo/bootstrap/bootstrap-overrides.css}" rel="stylesheet"/>
+
+    <!-- global styles -->
+    <link th:href="@{/static/css/personalInfo/layout.css}" rel="stylesheet"/>
+    <link th:href="@{/static/css/personalInfo/elements.css}" rel="stylesheet"/>
+    <link th:href="@{/static/css/personalInfo/icons.css}" rel="stylesheet"/>
+
+    <!-- this page specific styles 游泳-->
+    <link rel="stylesheet" th:href="@{/static/css/personalInfo/personal-info.css}" type="text/css" media="screen"/>
+</head>
+<body>
+<!-- main container .wide-content is used for this layout without sidebar :)  -->
+<div class="content wide-content">
+    <div class="container-fluid">
+        <div class="settings-wrapper" id="pad-wrapper">
+            <!-- avatar column -->
+            <div class="span3 avatar-box">
+                <div class="personal-image">
+                    <img th:src="|/static/imgs/user/${session.user.getPic()}|" alt="" class="avatar img-circle" id="user_pic_modal_btn"/>
+                </div>
+            </div>
+
+            <!-- edit form column -->
+            <div class="span7 personal-info">
+                <h5 class="personal-title">个人信息修改</h5>
+                <form id="user_edit_form" method="post" action="/user/updateUser" enctype="multipart/form-data">
+                    <input type="hidden" id="edit_id" name="id" th:value="${session.user.id}">
+                    <div class="field-box">
+                        <label>用户名:</label>
+                        <input type="text" class="span5 inline-input" id="edit_userName" placeholder="用户名"
+                               name="username" th:value="${session.user.username}"/>
+                    </div>
+                    <div class="field-box">
+                        <label>密码:</label>
+                        <input type="text" class="span5 inline-input" id="edit_password" placeholder="密码"
+                               name="password" th:value="${session.user.password}"/>
+                    </div>
+                    <div class="field-box">
+                        <label>年龄:</label>
+                        <input type="number" class="span5 inline-input" id="edit_age" placeholder="年龄" name="age"
+                               th:value="${session.user.age}"/>
+                    </div>
+                    <div class="field-box">
+                        <label>性别:</label>
+                        <div class="ui-select">
+                            <select name="sex" id="edit_sex">
+                                <option value="男" th:selected="${session.user.sex!='女'}">男</option>
+                                <option value="女" th:selectecd="${session.user.sex=='女'}">女</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field-box">
+                        <label>电话:</label>
+                        <input type="tel" class="span5 inline-input" id="edit_telephone" placeholder="电话"
+                               name="phone" th:value="${session.user.phone}"/>
+                    </div>
+                    <div class="field-box">
+                        <label>Email:</label>
+                        <input type="email" class="span5 inline-input" id="edit_Email" placeholder="邮箱" name="email"
+                               th:value="${session.user.email}"/>
+                    </div>
+                    <div class="field-box">
+                        <label>地址:</label>
+                        <input type="text" class="span5 inline-input" id="edit_address" placeholder="地址" name="address"
+                               th:value="${session.user.address}"/>
+                    </div>
+                    <div class="field-box">
+                        <label for="edit_state">领养次数:</label>
+                        <input type="number" class="span5 inline-input" id="edit_state" placeholder="0/1/2" name="state"
+                               th:value="${session.user.state}"/>
+                    </div>
+                    <div class="field-box">
+                        <label for="edit_img">上传头像(jpg/png/gif):</label>
+                        <input type="file" class="span5 inline-input" id="edit_img" name="img">
+                    </div>
+                    <div class="span6 field-box actions">
+                        <input type="submit" class="btn-glow primary" value="提交修改"/>
+                        <input type="button" onclick="location.href='/user/top'" class="btn-glow primary" value="返回主页" id="return_btn"/>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--<script th:src="/static/js/jq/jquery-2.2.3.min.js"></script>-->
+<!--<script th:src="/static/js/bootstrap-old/bootstrap.min.js"></script>-->
+</body>
+</html>

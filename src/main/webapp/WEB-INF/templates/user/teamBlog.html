@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="/static/imgs/favicon.webp" type="image/webp">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>团队博客</title>
+
+    <link rel="stylesheet" th:href="@{/static/bootstrap-old/bootstrap.css}" media="all">
+    <link rel="stylesheet" th:href="@{/static/css/about/style.css}" media="all" />
+    <style>
+        #blog {
+            background: url('/static/imgs/login/bg3.jpg') no-repeat center fixed;
+            background-size: cover;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            -ms-background-size: cover;
+            position: relative;
+        }
+        .myfont {
+            font-size: 10px;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<!-- blog -->
+<div class="blog" id="blog" >
+    <div class="container">
+        <h3 class="agile-title">团队活动</h3>
+        <div class="col-md-5 col-xs-6 blog-grids">
+
+
+            <div class="clearfix"></div>
+        </div>
+
+    </div>
+
+    <!-- 显示分页信息 -->
+    <div class="row">
+        <div class="col-md-4" id="page_info_area"></div>
+        <!-- 分页条信息 -->
+        <div class="col-md-6" id="page_nav_area"></div>
+    </div>
+    <div class="blog-grids mid-blog-agile">
+        <img src="/static/imgs/login/cat.jpg" class="img-responsive" alt="">
+    </div>
+</div>
+<!-- Modal5 -->
+<div class="modal fade" id="showTeam" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <div class="modal-info">
+
+                    <h4 id="title"></h4>
+                    <p id="addres"></p>
+                    <p class="para-agileits-w3layouts" id="event"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- //Modal5 -->
+<!-- //blog -->
+<!-- js -->
+<script th:src="@{/static/js/jq/jquery-3.4.1.min.js}"></script>
+<script th:src="@{/static/js/bootstrap-old/bootstrap.min.js}"></script>
+<!-- //js -->
+<script type="text/javascript">
+    // let totalRecord,currentPage;
+
+    $(function(){
+        to_page(1);
+    });
+    function to_page(pageNum){
+        $.ajax({
+            url:"/blog/blogs",
+            data:`pageNum=${pageNum}`,
+            type:"GET",
+            success:function(result){
+                //1、解析并显示员工数据
+                build_blogs_table(result);
+
+                //3、解析显示分页条数据
+                build_page_nav(result);
+            }
+        });
+    }
+
+
+    function build_blogs_table(pageInfo){
+        //清空table表格
+        $(".col-md-5").empty();
+        //index：下标 user：单个对象
+        let blogs=pageInfo.list;
+        $.each(blogs,function(index,blog){
+
+            let yearTd=$("<div></div>").addClass("blog-left-agileits").append($("<p></p>")).append(blog.actionTime);
+
+            let blogTd=$("<div></div>").addClass("blog-right-agileits-w3layouts");
+
+            let titleTd=$("<h4 style='cursor: pointer'></h4>").append($("<a></a>")).addClass("myfont").append(blog.title);
+            titleTd.attr("id","title_btn");
+            titleTd.attr("title-id",blog.id);
+
+            let peopelsTd=$("<p></p>").append($("<a></a>")).append(blog.peoples);
+
+            blogTd.append(titleTd).append(peopelsTd);
+
+            let clear=$("<div></div>").addClass("clearfix");
+            //append方法执行完成以后还是返回原来的元素
+            $("<div></div>").addClass("blog-full-wthree")
+                .append(yearTd)
+                .append(blogTd)
+                .append(clear)
+                .appendTo(".col-md-5");
+
+        });
+    }
+
+    //解析显示分页条，点击分页要能去下一页....
+    function build_page_nav(pageInfo){
+        //page_nav_area
+        $("#page_nav_area").empty();
+        let ul = $("<ul></ul>").addClass("pagination");
+
+        //构建元素
+        let firstPageLi = $("<li></li>").append($("<a style='cursor: pointer'></a>").append("首页").attr("href","#"));
+        let prePageLi = $("<li></li>").append($("<a style='cursor: pointer'></a>").append("&laquo;"));
+        if(pageInfo.hasPreviousPage == false){
+            firstPageLi.addClass("disabled");
+            prePageLi.addClass("disabled");
+        }else{
+            //为元素添加点击翻页的事件
+            firstPageLi.click(function(){
+                to_page(1);
+            });
+            prePageLi.click(function(){
+                to_page(pageInfo.pageNum -1);
+            });
+        }
+
+        let nextPageLi = $("<li></li>").append($("<a style='cursor: pointer'></a>").append("&raquo;"));
+        let lastPageLi = $("<li></li>").append($("<a style='cursor: pointer'></a>").append("末页").attr("href","#"));
+        if(pageInfo.hasNextPage == false){
+            nextPageLi.addClass("disabled");
+            lastPageLi.addClass("disabled");
+        }else{
+            nextPageLi.click(function(){
+                to_page(pageInfo.pageNum +1);
+            });
+            lastPageLi.click(function(){
+                to_page(pageInfo.pages);
+            });
+        }
+
+        //添加首页和前一页 的提示
+        ul.append(firstPageLi).append(prePageLi);
+        //1,2，3遍历给ul中添加页码提示
+        $.each(pageInfo.navigatepageNums,function(index,item){
+
+            let numLi = $("<li></li>").append($("<a></a>").append(item));
+            if(pageInfo.pageNum == item){
+                numLi.addClass("active");
+            }
+            numLi.click(function(){
+                to_page(item);
+            });
+            ul.append(numLi);
+        });
+        //添加下一页和末页 的提示
+        ul.append(nextPageLi).append(lastPageLi);
+
+        //把ul加入到nav
+        let navEle = $("<nav></nav>").append(ul);
+        navEle.appendTo("#page_nav_area");
+    }
+
+    //点击编辑按钮弹出模态框。
+
+    $(document).on("click","#title_btn",function(){
+
+        let id = $(this).attr("title-id");
+        $.ajax({
+            url:`/blog/findById?id=${id}`,
+            type:"GET",
+            success:function(blog){
+                //填充用户信息
+                $("#title").text(blog.title);
+                $("#addres").text(blog.address);
+                $("#event").text(blog.event);
+
+            }});
+        //2、弹出模态框
+        $("#showTeam").modal({
+            // backdrop:"static"
+        });
+    });
+</script>
+</body>
+</html>

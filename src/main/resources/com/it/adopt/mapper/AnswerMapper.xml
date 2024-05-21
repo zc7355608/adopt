@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.adopt.mapper.AnswerMapper">
+  <resultMap id="BaseResultMap" type="com.it.adopt.bean.Answer">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="comment_id" jdbcType="INTEGER" property="commentId" />
+    <result column="answer_time" jdbcType="TIMESTAMP" property="answerTime" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_answer
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByCommentid" parameterType="java.lang.Integer">
+    delete from t_answer
+    where comment_id = #{commentId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.it.adopt.bean.Answer">
+    insert into t_answer (id, user_id, comment_id, 
+      answer_time, content)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{commentId,jdbcType=INTEGER}, 
+      #{answerTime,jdbcType=TIMESTAMP}, #{content,jdbcType=VARCHAR})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.it.adopt.bean.Answer">
+    update t_answer
+    set user_id = #{userId,jdbcType=INTEGER},
+      comment_id = #{commentId,jdbcType=INTEGER},
+      answer_time = #{answerTime,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, user_id, comment_id, answer_time, content
+    from t_answer
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, user_id, comment_id, answer_time, content
+    from t_answer
+  </select>
+  <select id="selectByCommentId" resultMap="BaseResultMap">
+    select id, user_id, comment_id, answer_time, content
+    from t_answer where comment_id=#{commentId}
+  </select>
+</mapper>

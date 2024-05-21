@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <loggers>
+        <!--
+            level指定日志级别，从低到高的优先级：(级别越高信息越少)
+                ALL < TRACE < DEBUG < INFO < WARN < ERROR < FATAL < OFF
+        -->
+        <root level="DEBUG">
+            <appender-ref ref="spring6log"/>
+        </root>
+    </loggers>
+
+    <appenders>
+        <!--输出日志信息到控制台-->
+        <console name="spring6log" target="SYSTEM_OUT">
+            <!--控制日志输出的格式-->
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss SSS} [%t] %-3level %logger{1024} - %msg%n"/>
+        </console>
+    </appenders>
+
+</configuration>

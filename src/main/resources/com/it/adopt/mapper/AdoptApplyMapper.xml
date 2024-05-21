@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.it.adopt.mapper.AdoptApplyMapper">
+  <resultMap id="BaseResultMap" type="com.it.adopt.bean.AdoptApply">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="pet_id" jdbcType="INTEGER" property="petId" />
+    <result column="adopter_name" jdbcType="VARCHAR" property="adopterName" />
+    <result column="adopter_sex" jdbcType="CHAR" property="adopterSex" />
+    <result column="adopter_phone" jdbcType="VARCHAR" property="adopterPhone" />
+    <result column="adopter_email" jdbcType="VARCHAR" property="adopterEmail" />
+    <result column="adopter_address" jdbcType="VARCHAR" property="adopterAddress" />
+    <result column="apply_time" jdbcType="TIMESTAMP" property="applyTime" />
+    <result column="state" jdbcType="TINYINT" property="state" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_adopt_apply
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.it.adopt.bean.AdoptApply">
+    insert into t_adopt_apply (id, user_id, pet_id, 
+      adopter_name, adopter_sex, adopter_phone, 
+      adopter_email, adopter_address, apply_time, 
+      state)
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{petId,jdbcType=INTEGER}, 
+      #{adopterName,jdbcType=VARCHAR}, #{adopterSex,jdbcType=CHAR}, #{adopterPhone,jdbcType=VARCHAR}, 
+      #{adopterEmail,jdbcType=VARCHAR}, #{adopterAddress,jdbcType=VARCHAR}, #{applyTime,jdbcType=TIMESTAMP}, 
+      #{state,jdbcType=TINYINT})
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.it.adopt.bean.AdoptApply">
+    update t_adopt_apply
+    set user_id = #{userId,jdbcType=INTEGER},
+      pet_id = #{petId,jdbcType=INTEGER},
+      adopter_name = #{adopterName,jdbcType=VARCHAR},
+      adopter_sex = #{adopterSex,jdbcType=CHAR},
+      adopter_phone = #{adopterPhone,jdbcType=VARCHAR},
+      adopter_email = #{adopterEmail,jdbcType=VARCHAR},
+      adopter_address = #{adopterAddress,jdbcType=VARCHAR},
+      apply_time = #{applyTime,jdbcType=TIMESTAMP},
+      state = #{state,jdbcType=TINYINT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select id, user_id, pet_id, adopter_name, adopter_sex, adopter_phone, adopter_email, 
+    adopter_address, apply_time, state
+    from t_adopt_apply
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, user_id, pet_id, adopter_name, adopter_sex, adopter_phone, adopter_email, 
+    adopter_address, apply_time, state
+    from t_adopt_apply
+  </select>
+  <select id="count" resultType="_int">
+    select count(*) from t_adopt_apply
+  </select>
+  <select id="selectByAdoptName" parameterType="string" resultMap="BaseResultMap">
+    select id, user_id, pet_id, adopter_name, adopter_sex, adopter_phone, adopter_email,
+           adopter_address, apply_time, state
+    from t_adopt_apply
+    where adopter_name = #{adoptName}
+  </select>
+  <select id="selectByState" parameterType="Integer" resultMap="BaseResultMap">
+    select id, user_id, pet_id, adopter_name, adopter_sex, adopter_phone, adopter_email,
+           adopter_address, apply_time, state
+    from t_adopt_apply
+    where state = #{state}
+  </select>
+  <select id="selectByStateAndAdopterName" parameterType="map" resultMap="BaseResultMap">
+    select id, user_id, pet_id, adopter_name, adopter_sex, adopter_phone, adopter_email,
+           adopter_address, apply_time, state
+    from t_adopt_apply
+    where adopter_name=#{adopterName} and state=#{state}
+  </select>
+</mapper>

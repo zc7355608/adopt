@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>领养中心</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="/static/imgs/favicon.webp" type="image/webp">
+    <meta charset="UTF-8" />
+
+    <script>
+        addEventListener("load", function () {
+            setTimeout(hideURLbar, 0);
+        }, false);
+
+        function hideURLbar() {
+            window.scrollTo(0, 1);
+        }
+    </script>
+    <!--// Meta tag Keywords -->
+    <!-- css files -->
+    <link rel="stylesheet" th:href="@{/static/bootstrap-old/bootstrap.css}" media="all">
+    <!-- Owl-Carousel-CSS -->
+    <link rel="stylesheet" th:href="@{/static/css/about/style.css}" media="all">
+
+</head>
+<body>
+<!-- services -->
+
+<div class="services" id="services">
+    <div class="container">
+        <h3 class="agile-title">领养中心</h3>
+        <div class="w3_agile_services_grids">
+
+        </div>
+    </div>
+
+    <div class="w3l-img-side">
+        <img th:src="@{/static/imgs/animal/cat.jpg}">
+    </div>
+    <div class="w3l-img-side w3l-img-side2">
+        <img th:src="@{/static/imgs/animal/dog.jpg}">
+    </div>
+</div>
+<div class="row">
+    <!-- 分页条信息 -->
+    <div class="col-md-5" id="page_info_area"></div>
+    <div class="col-md-4 myPage" id="page_nav_area"></div>
+</div>
+
+<!-- start-smooth-scrolling 上去-->
+<script th:src="@{/static/js/jq/jquery-3.4.1.min.js}"></script>
+<script th:src="@{/static/js/bootstrap-old/bootstrap.min.js}"></script>
+<script>
+    jQuery(document).ready(function ($) {
+        $(".scroll").click(function (event) {
+            event.preventDefault();
+
+            $('html,body').animate({
+                scrollTop: $(this.hash).offset().top
+            }, 1000);
+        });
+    });
+</script>
+<!-- //end-smooth-scrolling -->
+
+<!-- smooth-scrolling-of-move-up 这是service.html页面反到底层上去的功能 -->
+<!--<script>-->
+<!--    $(document).ready(function () {-->
+<!--        $().UItoTop({-->
+<!--            easingType: 'easeOutQuart'-->
+<!--        });-->
+
+<!--    });-->
+<!--</script>-->
+<!-- //smooth-scrolling-of-move-up -->
+<script type="text/javascript">
+    //总的数据 当前的页面
+
+    let totalRecord,currentPage;
+
+    $(function(){
+        to_page(1);
+    });
+    function to_page(pageNum){
+        $.ajax({
+            url:"/pet/allPets",
+            data:"pageNum="+pageNum,
+            type:"GET",
+            success:function(pageInfo){
+                // console.log(result);
+                //1、解析并显示员工数据
+                build_pets_table(pageInfo);
+                //3、解析显示分页条数据
+                build_page_nav(pageInfo);
+            }
+        });
+    }
+
+    function build_pets_table(pageInfo){
+        //清空table表格
+        $(".w3_agile_services_grids").empty();
+        //index：下标 user：单个对象
+        let pets = pageInfo.list;
+        console.log(pageInfo)
+        console.log(pageInfo.list)
+
+        $.each(pets,function(index,pet){
+            let divTd=$("<div></div>").addClass("ih-item circle effect1 agile_services_grid");
+            let headTd=$("<div></div>").addClass("spinner");
+            let imgTd=$("<div></div>").addClass("img").append($("<img/>").addClass("img-responsive").attr("src","/static/imgs/animal/"+spilt(pet.pic)).attr("pet-id",pet.id));
+            // imgTd.attr("pet-id",pet.id);
+            /*$(".img-responsive").attr("pet-id",pet.id);*/
+            divTd.append(headTd);
+            divTd.append(imgTd);
+            let fileTd=$("<fieldset></fieldset>");
+            let animalTd=$("<legend></legend>").append(pet.petName);
+            fileTd.append(animalTd).append(pet.remark);
+
+            $("<div></div>").addClass("col-md-4 col-sm-4 col-xs-4 w3_agile_services_grid").attr("data-aos","zoom-in")
+                .append(divTd)
+                .append(fileTd)
+                .appendTo(".w3_agile_services_grids");
+        });
+    }
+
+    //解析显示分页条，点击分页要能去下一页....
+    function build_page_nav(pageInfo){
+        //page_nav_area
+        $("#page_nav_area").empty();
+        let ul = $("<ul></ul>").addClass("pagination");
+
+        //构建元素
+        let firstPageLi = $("<li></li>").append($("<a></a>").append("首页").attr("href","#"));
+        let prePageLi = $("<li></li>").append($("<a></a>").append("&laquo;"));
+        if(pageInfo.hasPreviousPage == false){
+            firstPageLi.addClass("disabled");
+            prePageLi.addClass("disabled");
+        }else{
+            //为元素添加点击翻页的事件
+            firstPageLi.click(function(){
+                to_page(1);
+            });
+            prePageLi.click(function(){
+                to_page(pageInfo.pageNum -1);
+            });
+        }
+
+        let nextPageLi = $("<li></li>").append($("<a></a>").append("&raquo;"));
+        let lastPageLi = $("<li></li>").append($("<a></a>").append("末页").attr("href","#"));
+        if(pageInfo.hasNextPage == false){
+            nextPageLi.addClass("disabled");
+            lastPageLi.addClass("disabled");
+        }else{
+            nextPageLi.click(function(){
+                to_page(pageInfo.pageNum +1);
+            });
+            lastPageLi.click(function(){
+                to_page(pageInfo.pages);
+            });
+        }
+
+        //添加首页和前一页 的提示
+        ul.append(firstPageLi).append(prePageLi);
+        //1,2，3遍历给ul中添加页码提示
+        $.each(pageInfo.navigatepageNums,function(index,item){
+
+            let numLi = $("<li></li>").append($("<a></a>").append(item));
+            if(pageInfo.pageNum == item){
+                numLi.addClass("active");
+            }
+            numLi.click(function(){
+                to_page(item);
+            });
+            ul.append(numLi);
+        });
+        //添加下一页和末页 的提示
+        ul.append(nextPageLi).append(lastPageLi);
+
+        //把ul加入到nav
+        let navEle = $("<nav></nav>").append(ul);
+        navEle.appendTo("#page_nav_area");
+
+    }
+
+    $(document).on("click",".img-responsive",function(){
+        let id = $(this).attr("pet-id")
+        // console.log($(this));
+        // console.log(id);
+        window.location.href = `/pet/findById?id=${id}`
+    })
+
+    //清空表单样式及内容
+    function reset_form(ele){
+        $(ele)[0].reset();
+        //清空表单样式
+        $(ele).find("*").removeClass("has-error has-success");
+        $(ele).find(".help-block").text("");
+    }
+
+    function spilt(pics) {
+        let pis=pics;
+        let pt=pis.toString().split(",");
+        return pt[0];
+    }
+</script>
+
+</body>
+
+</html>

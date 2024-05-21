@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+    <meta charset="UTF-8">
+    <title>用户登录</title>
+    <script src="/static/js/jq/jquery-3.4.1.min.js"></script>
+    <link rel="icon" href="/static/imgs/favicon.webp" type="image/webp">
+    <link rel="stylesheet" href="/static/css/user/login.css">
+</head>
+<style>
+    body {
+        background: #222 url("/static/imgs/others/bg.png") no-repeat center top;
+        background-size: cover;
+    }
+    .container a:hover {
+        cursor: pointer;
+    }
+    .container form .register {
+        margin: 20px 0px 10px 0px;
+    }
+</style>
+<body>
+<div class="wrapper">
+    <div class="container">
+        <h1>汪汪喵宠物领养</h1>
+
+        <form class="form" method="post" action="/user/login" >
+            <input type="text" placeholder="用户名" name="username" required>
+            <input type="password" placeholder="密码" name="password" required>
+            <div class='error-div'></div>
+            <button type="submit" id="login-button">登录</button>
+            <div class="register"><a href="/static/html/register.html">去注册</a></div>
+            <div><a href="/admin/login">管理员登录</a></div>
+        </form>
+    </div>
+
+    <ul class="bg-bubbles">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('form')
+
+        form.addEventListener('submit', event => {
+            event.preventDefault() // 阻止表单默认提交行为
+            const username = document.querySelector('form>[name="username"]').value
+            const password = document.querySelector('form>[name="password"]').value
+
+            const xhr = new XMLHttpRequest()
+            xhr.open('POST','/user/login')
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+            xhr.send(`username=${username}&password=${password}`)
+
+            xhr.onreadystatechange = function(event){
+                if(this.readyState===4){
+                    if(this.status >= 200 || this.status < 300){
+                        if(xhr.response==='yes'){
+                            $('form').fadeOut(500,function(){
+                                setTimeout(function(){
+                                    location.href = "/user/top"
+                                },500)
+                            })
+                            $('.wrapper').addClass('form-success')
+                        }else{
+                            document.querySelector('.error-div').innerHTML = '<span style="color: darkred">×用户名或密码错误！</span>'
+                        }
+                    }else{
+                        console.log(this.statusText)
+                    }
+                }
+            }
+
+        })
+    })
+</script>
+</body>
+</html>
