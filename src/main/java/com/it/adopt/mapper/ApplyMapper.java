@@ -12,11 +12,7 @@ public interface ApplyMapper {
 
     Apply selectByPrimaryKey(Integer id);
 
-    List<Apply> selectAll();
-
     int updateByPrimaryKey(Apply row);
 
-    List<Apply> selectByState(Byte state);
-
-    List<Apply> selectByNameAndState(@Param("name") String name, @Param("state") Byte state);
+    List<Apply> selectAll(@Param("name") String name, @Param("start") String start, @Param("end") String end, @Param("state") Byte state);
 }

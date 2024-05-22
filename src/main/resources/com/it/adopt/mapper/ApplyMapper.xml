@@ -39,18 +39,33 @@
     from t_apply
     where id = #{id,jdbcType=INTEGER}
   </select>
-  <select id="selectAll" resultMap="BaseResultMap">
-    select id, name, email, age, phone, message, apply_time, state
-    from t_apply
-  </select>
-  <select id="selectByState" parameterType="Byte" resultMap="BaseResultMap">
-    select id, name, email, age, phone, message, apply_time, state
-    from t_apply
-    where state = #{state,jdbcType=INTEGER}
-  </select>
-  <select id="selectByNameAndState" parameterType="map" resultMap="BaseResultMap">
-    select id, name, email, age, phone, message, apply_time, state
-    from t_apply
-    where name=#{name} and state=#{state}
+<!--  <select id="selectAll" resultMap="BaseResultMap">-->
+<!--    select id, name, email, age, phone, message, apply_time, state-->
+<!--    from t_apply-->
+<!--  </select>-->
+<!--  <select id="selectByState" parameterType="Byte" resultMap="BaseResultMap">-->
+<!--    select id, name, email, age, phone, message, apply_time, state-->
+<!--    from t_apply-->
+<!--    where state = #{state,jdbcType=INTEGER}-->
+<!--  </select>-->
+<!--  <select id="selectByNameAndState" parameterType="map" resultMap="BaseResultMap">-->
+<!--    select id, name, email, age, phone, message, apply_time, state-->
+<!--    from t_apply-->
+<!--    where name=#{name} and state=#{state}-->
+<!--  </select>-->
+  <select id="selectAll" parameterType="map" resultMap="BaseResultMap">
+    SELECT id, name, email, age, phone, message, apply_time, state
+    FROM t_apply
+    <where>
+      <if test="name != null">
+        AND name = #{name}
+      </if>
+      <if test="start != null and end != null">
+        AND apply_time BETWEEN #{start} AND #{end}
+      </if>
+      <if test="state != null">
+        AND state = #{state}
+      </if>
+    </where>
   </select>
 </mapper>

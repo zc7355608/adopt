@@ -50,7 +50,7 @@
                         <div class="layui-inline layui-show-xs-block">
                             <input type="text" placeholder="请输入用户名" class="layui-input" id="my-search">
                         </div>
-                        <div class="layui-inline layui-show-xs-block" onclick="queryUser(document.querySelector('#my-search').value,1)">
+                        <div class="layui-inline layui-show-xs-block" onclick="queryUser(document.querySelector('#my-search').value,1,document.querySelector('#start').value,document.querySelector('#end').value)">
                             <button class="layui-btn" lay-submit="false" lay-filter="search"><i class="layui-icon">&#xe615;</i></button>
                         </div>
                     </div>
@@ -91,7 +91,7 @@
     $(()=>{
         queryUser()
     })
-    function queryUser(username, pageNum){
+    function queryUser(username, pageNum, start, end){
         let urlStr = '/apply/applys'
         if(pageNum){
             urlStr = urlStr +'?pageNum='+ pageNum
@@ -100,6 +100,12 @@
         }
         if(username){
             urlStr = urlStr +'&username='+ username
+        }
+        if(start){
+            urlStr = urlStr +`&start=${start}`
+        }
+        if(end){
+            urlStr = urlStr +`&end=${end}`
         }
         //请求数据
         $.ajax({

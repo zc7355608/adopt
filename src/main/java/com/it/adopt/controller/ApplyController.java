@@ -12,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -47,17 +49,24 @@ public class ApplyController {
     @RequestMapping("/applys")
     @ResponseBody
     public PageInfo<Apply> applys(@RequestParam(value = "username", required = false) String name,
+                                  @RequestParam(value = "start", required = false) String start,
+                                  @RequestParam(value = "end", required = false) String end,
                                   @RequestParam("pageNum") Integer pageNum){
-        PageInfo<Apply> info = null;
-        PageHelper.startPage(pageNum, 5);
-        if(name!=null){
-            List<Apply> applies = applyService.selectByNameAndState(name, Byte.valueOf((byte) 0));
-            info = new PageInfo<>(applies, 3);
-        }else{
-            List<Apply> applies = applyService.selectByState(Byte.valueOf((byte) 0));
-            info = new PageInfo<>(applies, 3);
+        //如果日期中有一个为空，就给这个空日期设置默认值
+        if( (start!=null&&end==null) || (start==null&&end!=null) ){
+            DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+            if(start!=null){
+                end = pattern.format(LocalDateTime.now());
+            }else{
+                start = pattern.format(LocalDateTime.now());
+            }
         }
-        return info;
+
+        //开启分页
+        PageHelper.startPage(pageNum, 8);
+        //查
+        List<Apply> applies = applyService.selectByNameAndDateAndState(name, start, end, Byte.valueOf((byte) 0));
+        return new PageInfo<>(applies, 3);
     }
 
     @RequestMapping(value = "/agree/{id}", method = RequestMethod.PUT)

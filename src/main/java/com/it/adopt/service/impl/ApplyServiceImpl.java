@@ -39,13 +39,27 @@ public class ApplyServiceImpl implements ApplyService {
         return mapper.updateByPrimaryKey(apply);
     }
 
+    public List<Apply> selectAll(){
+        return mapper.selectAll(null,null,null,null);
+    }
+
     @Override
     public List<Apply> selectByState(Byte state) {
-        return mapper.selectByState(state);
+        return mapper.selectAll(null,null,null, state);
     }
 
     @Override
     public List<Apply> selectByNameAndState(String name, Byte state) {
-        return mapper.selectByNameAndState(name, state);
+        return mapper.selectAll(name,null,null, state);
+    }
+
+    @Override
+    public List<Apply> selectByNameAndDateAndState(String name, String start, String end, Byte state) {
+        return mapper.selectAll(name, start, end, state);
+    }
+
+    @Override
+    public List<Apply> selectByDateAndState(String start, String end, Byte state) {
+        return mapper.selectAll(null, start, end, state);
     }
 }

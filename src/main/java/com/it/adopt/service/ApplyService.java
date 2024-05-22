@@ -20,7 +20,12 @@ public interface ApplyService {
 
     int updateById(Apply apply);
 
+    List<Apply> selectAll();
+
     List<Apply> selectByState(Byte state);
 
     List<Apply> selectByNameAndState(String name, Byte state);
+
+    List<Apply> selectByNameAndDateAndState(String name, String start, String end, Byte state);
+    List<Apply> selectByDateAndState(String start, String end, Byte state);
 }
