@@ -67,7 +67,7 @@
                     </li>
                 </ul>
             </li>
-            <li>
+            <li th:if="${session.admin.power==1}">
                 <a href="javascript:;">
                     <i class="iconfont left-nav-li" lay-tips="管理员管理">&#xe726;</i>
                     <cite>管理员管理</cite>
@@ -118,7 +118,7 @@
                     </li>
                 </ul>
             </li>
-            <li>
+            <li th:if="${session.admin.power==1}">
                 <a href="javascript:;">
                     <i class="iconfont left-nav-li" lay-tips="志愿者管理">&#xe753;</i>
                     <cite>志愿者管理</cite>
@@ -128,6 +128,20 @@
                         <a onclick="xadmin.add_tab('志愿者申请','/admin/apply')">
                             <i class="iconfont">&#xe69b;</i>
                             <cite>志愿者申请</cite>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont left-nav-li" lay-tips="博客管理">&#xe705;</i>
+                    <cite>博客管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i></a>
+                <ul class="sub-menu">
+                    <li>
+                        <a onclick="xadmin.add_tab('团队博客','/admin/blog-list')">
+                            <i class="iconfont">&#xe6a2;</i>
+                            <cite>团队博客</cite>
                         </a>
                     </li>
                 </ul>

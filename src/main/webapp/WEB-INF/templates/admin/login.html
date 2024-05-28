@@ -53,7 +53,7 @@ $(function() {
                 dataType: 'text',
                 success: function (data) {
                     if(data==='yes'){
-                        layer.msg('√ 登录成功！稍后跳转..', () => {
+                        layer.msg('√ 登录成功！稍后跳转..', {time:1000},() => {
                             window.location = '/admin/index'
                         })
                     }else{

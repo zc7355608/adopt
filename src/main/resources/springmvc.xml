@@ -52,30 +52,4 @@
 <!--·······························视图控制器······························································-->
 <!--    欢迎页-->
     <mvc:redirect-view-controller path="/" redirect-url="/static/html/login.html" />
-
-<!--管理员视图-->
-<!--    <mvc:view-controller path="/admin/login" view-name="admin/login" />-->
-
-<!--    <mvc:view-controller path="/admin/index" view-name="admin/index" />-->
-<!--    <mvc:view-controller path="/admin/welcome" view-name="admin/welcome" />-->
-<!--    <mvc:view-controller path="/admin/user-list" view-name="admin/user-list" />-->
-<!--    <mvc:view-controller path="/admin/user-add" view-name="admin/user-add" />-->
-<!--    <mvc:view-controller path="/admin/admin-list" view-name="admin/admin-list" />-->
-<!--    <mvc:view-controller path="/admin/admin-add" view-name="admin/admin-add" />-->
-<!--    <mvc:view-controller path="/admin/pet-list" view-name="admin/pet-list" />-->
-<!--    <mvc:view-controller path="/admin/pet-add" view-name="admin/pet-add" />-->
-<!--    <mvc:view-controller path="/admin/adopt-apply" view-name="admin/adopt-apply" />-->
-<!--    <mvc:view-controller path="/admin/agree" view-name="admin/agree" />-->
-<!--    <mvc:view-controller path="/admin/disagree" view-name="admin/disagree" />-->
-
-<!--    <mvc:view-controller path="/admin/user" view-name="admin/user" />-->
-<!--    <mvc:view-controller path="/admin/pet" view-name="admin/pet" />-->
-<!--    <mvc:view-controller path="/admin/pet" view-name="admin/developing" />-->
-<!--    <mvc:view-controller path="/admin/disagree" view-name="admin/disagree" />-->
-<!--    <mvc:view-controller path="/admin/comment" view-name="admin/comment" />-->
-<!--    <mvc:view-controller path="/admin/blog" view-name="admin/blog" />-->
-<!--    <mvc:view-controller path="/admin/apply" view-name="admin/apply" />-->
-<!--    <mvc:view-controller path="/admin/agree" view-name="admin/agree" />-->
-<!--    <mvc:view-controller path="/admin/admin" view-name="admin/admin" />-->
-<!--    <mvc:view-controller path="/admin/adopt" view-name="admin/adopt" />-->
 </beans>

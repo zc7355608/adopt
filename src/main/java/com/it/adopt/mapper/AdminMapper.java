@@ -13,10 +13,12 @@ public interface AdminMapper {
     Admin selectByPrimaryKey(Integer id);
 
     List<Admin> selectAll();
-    int count();
-    List<Admin> selectByName(String name);
 
     int updateByPrimaryKey(Admin row);
 
     Admin selectByNameAndPwd(@Param("adminName") String adminName, @Param("adminPwd") String adminPwd);
+
+    int count();
+
+    List<Admin> selectByName(String adminName);
 }

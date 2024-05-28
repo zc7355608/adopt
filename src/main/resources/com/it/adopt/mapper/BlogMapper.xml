@@ -37,7 +37,11 @@
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select id, action_time, address, peoples, event, title
-    from t_blog
+    from t_blog order by id desc
+  </select>
+  <select id="selectByTitle" resultMap="BaseResultMap">
+    select id, action_time, address, peoples, event, title
+    from t_blog where title like '%${title}%' order by id desc
   </select>
   <select id="count" resultType="_int">
     select count(*) from t_blog

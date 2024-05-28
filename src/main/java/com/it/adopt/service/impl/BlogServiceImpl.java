@@ -23,6 +23,11 @@ public class BlogServiceImpl implements BlogService {
     private BlogMapper mapper;
 
     @Override
+    public int updateById(Blog blog) {
+        return mapper.updateByPrimaryKey(blog);
+    }
+
+    @Override
     public int insert(Blog blog) {
         return mapper.insert(blog);
     }
@@ -40,5 +45,15 @@ public class BlogServiceImpl implements BlogService {
     @Override
     public Blog findById(Integer id) {
         return mapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public List<Blog> selectByTitle(String title) {
+        return mapper.selectByTitle(title);
+    }
+
+    @Override
+    public int deleteById(Integer id) {
+        return mapper.deleteByPrimaryKey(id);
     }
 }

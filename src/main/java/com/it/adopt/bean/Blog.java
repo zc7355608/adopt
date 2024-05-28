@@ -2,6 +2,7 @@ package com.it.adopt.bean;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -13,6 +14,7 @@ public class Blog implements Serializable {
 
     private Integer id;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @JsonFormat(pattern = "yyyy年MM月dd日 HH:mm:ss")
     private Date actionTime;
 

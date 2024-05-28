@@ -64,7 +64,7 @@ public class AdoptApplyServiceImpl implements AdoptApplyService {
 
     @Override
     public List<AdoptApply> findByAdopterName(String adoptName) {
-        return mapper.selectByAdoptName(adoptName);
+        return mapper.selectByAdopterName(adoptName);
     }
 
     @Override

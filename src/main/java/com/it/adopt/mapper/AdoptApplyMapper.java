@@ -17,7 +17,7 @@ public interface AdoptApplyMapper {
 
     int updateByPrimaryKey(AdoptApply row);
 
-    List<AdoptApply> selectByAdoptName(String adoptName);
+    List<AdoptApply> selectByAdopterName(String adoptName);
 
     List<AdoptApply> selectByState(Integer state);
 

@@ -16,6 +16,8 @@ import java.util.List;
  */
 public interface BlogService {
 
+    int updateById(Blog blog);
+
     int insert(Blog blog);
 
     List<Blog> selectAll();
@@ -23,4 +25,7 @@ public interface BlogService {
 
     Blog findById(Integer id);
 
+    List<Blog> selectByTitle(String title);
+
+    int deleteById(Integer id);
 }

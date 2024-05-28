@@ -129,6 +129,15 @@ public class AdminController {
         return mav;
     }
 
+    @RequestMapping(value = "/blog-edit")
+    public ModelAndView editBlog(HttpServletRequest req, @RequestParam("id") String id, @RequestParam("title") String title){
+        ModelAndView mav = new ModelAndView();
+        mav.addObject("id", id);
+        mav.addObject("title", title);
+        mav.setViewName("admin/blog-edit");
+        return mav;
+    }
+
     @RequestMapping(value = "/admins")
     @ResponseBody
     public PageInfo<Admin> admins(@RequestParam(value = "name", required = false) String name, @Param("pageNum") Integer pageNum){
@@ -250,6 +259,8 @@ public class AdminController {
     @RequestMapping(value = "/addAdmin", method = RequestMethod.POST)
     @ResponseBody
     public String addAdmin(Admin admin){
+        //添加的是普通管理员
+        admin.setPower(Byte.valueOf((byte) 0));
         admin.setPic("a.jpg");
         int rows = adminService.addAdmin(admin);
         if (rows>0) {

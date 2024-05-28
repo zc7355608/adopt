@@ -54,22 +54,22 @@
   <select id="count" resultType="_int">
     select count(*) from t_adopt_apply
   </select>
-  <select id="selectByAdoptName" parameterType="string" resultMap="BaseResultMap">
+  <select id="selectByAdopterName" parameterType="string" resultMap="BaseResultMap">
     select id, user_id, pet_id, adopter_name, adopter_sex, adopter_phone, adopter_email,
            adopter_address, apply_time, state
     from t_adopt_apply
-    where adopter_name = #{adoptName}
+    where adopter_name = #{adoptName}  order by id desc
   </select>
   <select id="selectByState" parameterType="Integer" resultMap="BaseResultMap">
     select id, user_id, pet_id, adopter_name, adopter_sex, adopter_phone, adopter_email,
            adopter_address, apply_time, state
     from t_adopt_apply
-    where state = #{state}
+    where state = #{state} order by id desc
   </select>
   <select id="selectByStateAndAdopterName" parameterType="map" resultMap="BaseResultMap">
     select id, user_id, pet_id, adopter_name, adopter_sex, adopter_phone, adopter_email,
            adopter_address, apply_time, state
     from t_adopt_apply
-    where adopter_name=#{adopterName} and state=#{state}
+    where adopter_name=#{adopterName} and state=#{state} order by id desc
   </select>
 </mapper>

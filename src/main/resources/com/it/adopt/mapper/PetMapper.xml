@@ -41,17 +41,17 @@
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
     select id, pet_name, pet_type, sex, birth, pic, state, remark
-    from t_pet
+    from t_pet order by id desc
   </select>
   <select id="count" resultType="_int">
     select count(*) from t_pet
   </select>
   <select id="selectByPetType" resultMap="BaseResultMap">
     select id, pet_name, pet_type, sex, birth, pic, state, remark
-    from t_pet where pet_type=#{type}
+    from t_pet where pet_type=#{type} order by id desc
   </select>
   <select id="selectByState" resultMap="BaseResultMap">
     select id, pet_name, pet_type, sex, birth, pic, state, remark
-    from t_pet where state=#{state}
+    from t_pet where state=#{state} order by id desc
   </select>
 </mapper>

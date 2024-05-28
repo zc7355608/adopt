@@ -49,7 +49,7 @@
         </javaClientGenerator>
 
         <!-- 表名和对应的实体类名-->
-<!--        <table tableName="t_user" domainObjectName="User"/>-->
+<!--        <table tableName="t_admin" domainObjectName="Admin"/>-->
 <!--        <table tableName="t_pet" domainObjectName="Pet"/>-->
 <!--        <table tableName="t_adopt_apply" domainObjectName="AdoptApply"/>-->
 <!--        <table tableName="t_comment" domainObjectName="Comment"/>-->

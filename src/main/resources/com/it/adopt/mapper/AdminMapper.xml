@@ -12,6 +12,7 @@
     <result column="sex" jdbcType="CHAR" property="sex" />
     <result column="pic" jdbcType="VARCHAR" property="pic" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="power" jdbcType="TINYINT" property="power" />
   </resultMap>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_admin
@@ -20,12 +21,12 @@
   <insert id="insert" parameterType="com.it.adopt.bean.Admin">
     insert into t_admin (id, admin_name, admin_pwd, 
       realname, phone, email, 
-      birth, sex, pic, remark
-      )
+      birth, sex, pic, remark, 
+      power)
     values (#{id,jdbcType=INTEGER}, #{adminName,jdbcType=VARCHAR}, #{adminPwd,jdbcType=VARCHAR}, 
       #{realname,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
-      #{birth,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, #{pic,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
-      )
+      #{birth,jdbcType=VARCHAR}, #{sex,jdbcType=CHAR}, #{pic,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{power,jdbcType=TINYINT})
   </insert>
   <update id="updateByPrimaryKey" parameterType="com.it.adopt.bean.Admin">
     update t_admin
@@ -37,27 +38,30 @@
       birth = #{birth,jdbcType=VARCHAR},
       sex = #{sex,jdbcType=CHAR},
       pic = #{pic,jdbcType=VARCHAR},
-      remark = #{remark,jdbcType=VARCHAR}
+      remark = #{remark,jdbcType=VARCHAR},
+      power = #{power,jdbcType=TINYINT}
     where id = #{id,jdbcType=INTEGER}
   </update>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-    select id, admin_name, admin_pwd, realname, phone, email, birth, sex, pic, remark
+    select id, admin_name, admin_pwd, realname, phone, email, birth, sex, pic, remark, 
+    power
     from t_admin
     where id = #{id,jdbcType=INTEGER}
   </select>
   <select id="selectAll" resultMap="BaseResultMap">
-    select id, admin_name, admin_pwd, realname, phone, email, birth, sex, pic, remark
+    select id, admin_name, admin_pwd, realname, phone, email, birth, sex, pic, remark, 
+    power
     from t_admin
   </select>
   <select id="selectByNameAndPwd" resultMap="BaseResultMap">
-    select id, admin_name, admin_pwd, realname, phone, email, birth, sex, pic, remark
+    select id, admin_name, admin_pwd, realname, phone, email, birth, sex, pic, remark, power
     from t_admin where admin_name=#{adminName} and admin_pwd=#{adminPwd}
   </select>
   <select id="count" resultType="_int">
-    select count(*) from t_admin;
+    select count(*) from t_admin
   </select>
   <select id="selectByName" resultMap="BaseResultMap">
-    select id, admin_name, admin_pwd, realname, phone, email, birth, sex, pic, remark
+    select id, admin_name, admin_pwd, realname, phone, email, birth, sex, pic, remark, power
     from t_admin where admin_name=#{name}
   </select>
 </mapper>

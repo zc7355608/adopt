@@ -14,4 +14,6 @@ public interface BlogMapper {
     int count();
 
     int updateByPrimaryKey(Blog row);
+
+    List<Blog> selectByTitle(String title);
 }
