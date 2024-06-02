@@ -25,26 +25,19 @@
     <div class="layui-row">
         <form class="layui-form" id="my-form">
 <!--            <span>编辑</span><input type="checkbox" lay-skin="switch" lay-text="ON|OFF">-->
-            <input type="hidden" name="id" th:value="${session.admin.id}">
+            <input type="hidden" name="id" th:value="${session.admin.id}" id="adminid">
             <div class="layui-form-item">
                 <label for="L_adminName" class="layui-form-label"><span class="x-red"></span>账号</label>
                 <div class="layui-input-inline">
-                    <input type="text" id="L_adminName" name='adminName' required class="layui-input" th:value="${session.admin.adminName}">
+                    <input type="text" id="L_adminName" name='adminName' class="layui-input" th:value="${session.admin.adminName}">
                 </div>
             </div>
             <div class="layui-form-item">
-                <label for="L_adminPwd" class="layui-form-label"><span class="x-red"></span>密码</label>
+                <label for="L_adminPwd" class="layui-form-label">密码</label>
                 <div class="layui-input-inline">
-                    <input type="text" id="L_adminPwd" name='adminPwd' required class="layui-input" th:value="${session.admin.adminPwd}">
+                    <input type="text" id="L_adminPwd" name='adminPwd' class="layui-input" th:value="${session.admin.adminPwd}">
                 </div>
             </div>
-<!--            <div class="layui-form-item">-->
-<!--                <label class="layui-form-label"><span class="x-red"></span>角色</label>-->
-<!--                <div class="layui-input-block">-->
-<!--                    <input type="checkbox" name="like1[write]" lay-skin="primary" title="超级管理员">-->
-<!--                    <input type="checkbox" name="like1[read]" lay-skin="primary" title="管理员">-->
-<!--                </div>-->
-<!--            </div>-->
             <div class="layui-form-item">
                 <label for="L_realname" class="layui-form-label">真实姓名</label>
                 <div class="layui-input-inline">
@@ -72,7 +65,7 @@
             <div class="layui-form-item">
                 <label for="L_sex" class="layui-form-label">性别</label>
                 <div class="layui-input-inline">
-                    <input type="text" id="L_sex" name="sex" autocomplete="off" lay-verify="sex" class="layui-input" th:value="${session.admin.sex}">
+                    <input type="text" id="L_sex" name="sex" autocomplete="off" maxlength="1" class="layui-input" th:value="${session.admin.sex}">
                 </div>
             </div>
             <div class="layui-form-item">
@@ -89,76 +82,57 @@
             </div>
             <div class="layui-form-item">
                 <label for="L_btn" class="layui-form-label"></label>
-                <button id="L_btn" class="layui-btn" lay-filter="save" lay-submit="">修改</button></div>
+                <button id="L_btn" class="layui-btn" type="submit">修改</button>
+            </div>
         </form>
     </div>
 </div>
 <script>
+    document.querySelector('#my-form').addEventListener('submit', e => {
+        e.preventDefault()
 
-    layui.use(['form', 'layer'], function() {
-        $ = layui.jquery;
-        let form = layui.form,
-            layer = layui.layer;
+        const xhr = new XMLHttpRequest()
+        xhr.open('POST', '/admin/update')
+        const fd = new FormData()
+        //没上传文件，那么后端Multipart对象对应的是null
+        fd.append('img', document.querySelector('#L_touxiang').files[0])
+        console.dir( document.querySelector('#L_touxiang').files[0] )
 
-        //自定义验证规则
-        form.verify({
-            sex: function (value) {
-                if(value.length!=1){
-                    return '性别不合法'
-                }
-            }
-        });
+        fd.append('remark', document.querySelector('#L_remark').value)
+        fd.append('sex', document.querySelector('#L_sex').value)
+        fd.append('birth', document.querySelector('#L_birth').value)
+        fd.append('email', document.querySelector('#L_email').value)
+        fd.append('phone', document.querySelector('#L_phone').value)
+        fd.append('realname', document.querySelector('#L_realname').value)
+        fd.append('adminPwd', document.querySelector('#L_adminPwd').value)
+        fd.append('adminName', document.querySelector('#L_adminName').value)
+        fd.append('id', document.querySelector('#adminid').value)
 
-        //监听提交
-        form.on('submit(save)', function(data) {
-            // console.log(data);
-        // ajax请求提交数据
-            //准备表单数据
-            const shuju = new FormData()
-            shuju.append('img', data.form[10].files[0])
-            shuju.append('remark', data.form[9].value)
-            shuju.append('sex', data.form[8].value)
-            shuju.append('birth', data.form[7].value)
-            shuju.append('email', data.form[6].value)
-            shuju.append('phone', data.form[5].value)
-            shuju.append('realname', data.form[4].value)
-            shuju.append('adminPwd', data.form[3].value)
-            shuju.append('adminName', data.form[2].value)
-            shuju.append('id', data.form[1].value)
-            //发请求
-            const xhr = new XMLHttpRequest()
-            xhr.open('post', '/admin/update')
-            xhr.send(shuju)
-            xhr.addEventListener('loadend', ()=>{
-                if(xhr.status>=200 || xhr.status<300){
+        xhr.send(fd)
+        xhr.addEventListener('loadend', ()=>{
+            if(xhr.status >= 200 || xhr.status < 300){
+                layui.use(['form', 'layer'], function() {
+                    let layer = layui.layer;
+
                     if(xhr.response==='yes'){
-                        layer.alert("增加成功", {
+                        layer.alert("修改成功", {
                                 icon: 6
                             },
                             function() {
+                                // 获得frame索引
+                                let index = parent.layer.getFrameIndex(window.name);
                                 //关闭当前frame
-                                xadmin.close();
-                                // 可以对父窗口进行刷新
-                                xadmin.father_reload();
-                        });
+                                parent.layer.close(index);
+                            });
                     }else{
-                        layer.alert("增加失败", {
-                                icon: 2
-                            },
-                            function() {
-                                //关闭当前frame
-                                xadmin.close();
-                                // 可以对父窗口进行刷新
-                                xadmin.father_reload();
-                        });
+                        layer.alert('修改失败，请联系管理员！')
                     }
-                }else{
-                    console.log(xhr.response)
-                }
-            })
-            return false;
-        });
-    });
+                })
+            }else{
+                console.log(xhr.response)
+            }
+        })
+    })
 </script>
 </body>
 </html>

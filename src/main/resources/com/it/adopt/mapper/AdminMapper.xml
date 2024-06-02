@@ -51,7 +51,7 @@
   <select id="selectAll" resultMap="BaseResultMap">
     select id, admin_name, admin_pwd, realname, phone, email, birth, sex, pic, remark, 
     power
-    from t_admin
+    from t_admin where power=0
   </select>
   <select id="selectByNameAndPwd" resultMap="BaseResultMap">
     select id, admin_name, admin_pwd, realname, phone, email, birth, sex, pic, remark, power

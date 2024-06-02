@@ -50,7 +50,7 @@
                 <label for="L_phone" class="layui-form-label">
                     <span class="x-red">*</span>电话</label>
                 <div class="layui-input-inline">
-                    <input type="number" id="L_phone" name="phone" lay-verify="phone" autocomplete="off" class="layui-input"></div>
+                    <input type="tel" id="L_phone" name="phone" autocomplete="off" class="layui-input"></div>
             </div>
             <div class="layui-form-item">
                 <label for="L_address" class="layui-form-label">
@@ -76,7 +76,6 @@
                 return '年龄不合法';
             }
         },
-        phone: [/^1[3-9]\d{9}$/, '电话不合法'],
         sex: function (value) {
             if(value.length!=1){
                 return '性别不合法'

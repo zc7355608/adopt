@@ -96,12 +96,13 @@ public class PetController {
     @ResponseBody
     public String update(Pet pet){
         Pet p = petService.findById(pet.getId());
-        p.setPetName(pet.getPetName());
-        p.setBirth(pet.getBirth());
-        p.setSex(pet.getSex());
-        p.setPetType(pet.getPetType());
-        p.setRemark(pet.getRemark());
-        p.setState(pet.getState());
+        if(pet.getPetName()!=null){ p.setPetName(pet.getPetName()); }
+        if(pet.getPetType()!=null){ p.setPetType(pet.getPetType()); }
+        if(pet.getSex()!=null){ p.setSex(pet.getSex()); }
+        if(pet.getBirth()!=null){ p.setBirth(pet.getBirth()); }
+        if(pet.getState()!=null){ p.setState(pet.getState()); }
+        if(pet.getRemark()!=null){ p.setRemark(pet.getRemark()); }
+
         int rows = petService.update(p);
         if(rows>0){
             return "yes";

@@ -92,11 +92,11 @@ public class BlogController {
     @ResponseBody
     public String update(Blog blog){
         Blog old = blogService.findById(blog.getId());
-        if(blog.getTitle()!=null){ old.setTitle(blog.getTitle()); }
-        if(blog.getPeoples()!=null){ old.setPeoples(blog.getPeoples()); }
-        if(blog.getEvent()!=null){ old.setEvent(blog.getEvent()); }
-        if(blog.getAddress()!=null){ old.setAddress(blog.getAddress()); }
-        if(blog.getActionTime()!=null){ old.setActionTime(blog.getActionTime()); }
+        if( (blog.getTitle()!=null) && (!blog.getTitle().equals("")) ){ old.setTitle(blog.getTitle()); }
+        if( (blog.getPeoples()!=null) && (!blog.getPeoples().equals("")) ){ old.setPeoples(blog.getPeoples()); }
+        if( (blog.getEvent()!=null) && (!blog.getEvent().equals("")) ){ old.setEvent(blog.getEvent()); }
+        if( (blog.getAddress()!=null) && (!blog.getAddress().equals("")) ){ old.setAddress(blog.getAddress()); }
+        if( (blog.getActionTime()!=null) && (!blog.getActionTime().equals("")) ){ old.setActionTime(blog.getActionTime()); }
         int rows = blogService.updateById(old);
         return rows>0 ? "yes" : "error";
     }

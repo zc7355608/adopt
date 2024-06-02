@@ -193,13 +193,22 @@ public class AdminController {
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     @ResponseBody
-    public String update(HttpServletRequest request,Integer id,String adminName,String adminPwd,String realname,String phone,String email,String birth,String sex,String remark,
+    public String update(HttpServletRequest request,
+                         @RequestParam(value = "id") Integer id,
+                         @RequestParam(value = "adminName", required = false) String adminName,
+                         @RequestParam(value = "adminPwd", required = false) String adminPwd,
+                         @RequestParam(value = "realname", required = false) String realname,
+                         @RequestParam(value = "phone", required = false) String phone,
+                         @RequestParam(value = "email", required = false) String email,
+                         @RequestParam(value = "birth", required = false) String birth,
+                         @RequestParam(value = "sex", required = false) String sex,
+                         @RequestParam(value = "remark", required = false) String remark,
                          @RequestParam(value = "img", required = false) MultipartFile multipartFile){
         Admin admin = adminService.findById(id);
         if( admin==null ){ return "error"; }
 
-        if( adminName!=null ){ admin.setAdminName(adminName); }
-        if( adminPwd!=null ){
+        if( adminName!=null && !adminName.equals("") ){ admin.setAdminName(adminName); }
+        if( adminPwd!=null && !adminPwd.equals("") ){
             if( adminPwd.equals(admin.getAdminPwd()) ){
                 //密码没变
             }else{
@@ -208,12 +217,12 @@ public class AdminController {
                 request.getSession().invalidate();
             }
         }
-        if( realname!=null ){ admin.setRealname(realname); }
-        if( phone!=null ){ admin.setPhone(phone); }
-        if( email!=null ){ admin.setEmail(email); }
-        if( birth!=null ){ admin.setBirth(birth); }
-        if( sex!=null ){ admin.setSex(sex); }
-        if( remark!=null ){ admin.setRemark(remark); }
+        if( realname!=null && !realname.equals("")){ admin.setRealname(realname); }
+        if( phone!=null && !phone.equals("")){ admin.setPhone(phone); }
+        if( email!=null && !email.equals("")){ admin.setEmail(email); }
+        if( birth!=null && !birth.equals("")){ admin.setBirth(birth); }
+        if( sex!=null && !sex.equals("")){ admin.setSex(sex); }
+        if( remark!=null && !remark.equals("")){ admin.setRemark(remark); }
 
         //上传图片
         if( multipartFile!=null ){
