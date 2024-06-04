@@ -36,7 +36,7 @@
         <property name="typeAliasesPackage" value="com.it.adopt.bean"/>
         <property name="configLocation" value="classpath:mybatis-config.xml"/>
     </bean>
-    <!-- 将所有mapper对象放入spring容器中 -->
+    <!-- 将所有mapper实现类对象放入spring容器中 -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
         <property name="basePackage" value="com.it.adopt.mapper"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"/>
